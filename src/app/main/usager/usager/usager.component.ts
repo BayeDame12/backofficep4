@@ -5,6 +5,9 @@ import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Iusager} from "../../../model/iusager";
 
+declare var jquery: any;
+declare var $: any;
+
 @Component({
   selector: 'app-usager',
   templateUrl: './usager.component.html',
@@ -17,50 +20,63 @@ export class UsagerComponent implements OnInit {
   detailUsager!: any
   detailus!: any
   modalRef?: BsModalRef;
-  monFormulaire!: FormGroup;
-  Formulaire!: FormGroup;
   usage!: any
   status!: string;
+  messageerreurformulaire!: string;
   states = [
     'vto',
     'vpt',
   ];
-  element!: any;
+  submitted = false;
+  registerForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private modalService: BsModalService, private activatedRoute: ActivatedRoute, private backofficerServiceService: BackofficerServiceService) {
+  constructor(private formBuilder: FormBuilder, private modalService: BsModalService, private activatedRoute: ActivatedRoute, private backofficerServiceService: BackofficerServiceService) {
   }
 
   ngOnInit(): void {
 //affichage donnee usager venue de la base de donne
     this.backofficerServiceService.getUsager().subscribe(data => {
       if (data != null) {
+        this.usager = data;
+        console.warn("donne", this.usager);
         console.log("donnees disponible");
-        data.forEach(element => {
-          this.usager = data;
-          this.element = element;
-        })
       } else {
         console.warn("pas de données");
       }
-    })
+    });
 
-    //lister details usager
-    const usagerdetail = this.activatedRoute.snapshot.params['id'];
-    this.backofficerServiceService.detailgetUsager(usagerdetail).subscribe(data => {
-      this.detailUsager = data;
-      console.warn("supprimer", this.detailUsager)
-    })
-    this.monFormulaire = this.fb.group({
+    this.registerForm = this.formBuilder.group({
       prenom: ['', Validators.required],
       nom: ['', Validators.required],
       geolatitude: ['', Validators.required],
       geolongititude: ['', Validators.required],
-      msisdn: ['', Validators.required],
-      numeroContact: ['', Validators.required],
-      login: ['', Validators.required],
+      login: ['', [Validators.required, Validators.email]],
+      msisdn: ['', [Validators.required, Validators.maxLength(9)]],
+      numeroContact: ['', [Validators.required, Validators.maxLength(9)]],
       type: ['', Validators.required],
-    });
 
+    });
+    this.status = "ajouter"
+  }
+
+
+
+  get f() {
+    return this.registerForm.controls;
+  }
+
+  onSubmit() {
+    this.submitted = true;
+    // stop here if form is invalid
+    if (this.registerForm.invalid) {
+      return;
+    }
+    this.ajout(this.registerForm.value);
+  }
+
+  onReset() {
+    this.submitted = false;
+    this.registerForm.reset();
   }
 
   detail(id: any) {
@@ -69,7 +85,7 @@ export class UsagerComponent implements OnInit {
   }
 
   update(usager: Iusager, id: any) {
-    this.monFormulaire = this.fb.group({
+    this.registerForm = this.formBuilder.group({
       id: [usager.id],
       prenom: [usager.prenom, Validators.required],
       nom: [usager.nom, Validators.required],
@@ -80,19 +96,18 @@ export class UsagerComponent implements OnInit {
       login: [usager.login, Validators.required],
       type: [usager.type, Validators.required],
     });
-    this.backofficerServiceService.updateUsager(this.monFormulaire, usager.id).subscribe({
+    this.status = "mise a jour"
+    this.backofficerServiceService.updateUsager(this.registerForm, usager.id).subscribe({
       next: (x) => console.log('Observer got a next value vto persist: ' + x),
       error: (err) => console.error('Observer got an error: ' + err),
       complete: () => console.log('Observer got a complete notification')
     });
-
   }
 
   ajout(monFormulaire: any) {
-    this.backofficerServiceService.addusager(this.monFormulaire);
-    this.monFormulaire.reset()
+    this.backofficerServiceService.addusager(this.registerForm);
+    this.registerForm.reset()
   }
-
 //supprimer un utilisateur
   deleteUsager(usager: any) {
     this.backofficerServiceService.deleteUsager(usager).subscribe(data => {
@@ -108,11 +123,15 @@ export class UsagerComponent implements OnInit {
     if (uptodate.id) {
       this.update(uptodate, uptodate.id)
       window.location.reload();
-
     } else {
 
       this.ajout(uptodate)
       window.location.reload();
     }
   }
+
+
 }
+
+
+

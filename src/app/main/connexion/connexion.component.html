@@ -1,25 +1,29 @@
 <div class="d-flex">
   <div class="sidebare">
-
-        <div class="sidebareheader">
-          <h5 class="fw-bold">OFMS CLIENT CUSTOMER</h5>
-          <img src="assets/group-37.png" alt="" srcset="">
-        </div>
-
+    <div class="sidebareheader">
+      <h5 class="fw-bold">OFMS CLIENT CUSTOMER</h5>
+      <img src="assets/group-37.png" alt="" srcset="">
+    </div>
   </div>
   <div class="main">
     <img src="assets/logo-sonatel@2x.png" alt="" sizes="" srcset="">
-    <form class="formulaireConeexion">
-      <div class="divlog">
 
-        <input type="email" class="form-control " id="exampleInputEmail1" placeholder="login" aria-describedby="emailHelp">
+    <form class="formulaireConeexion" [formGroup]="connexionForm" (ngSubmit)="onSubmit()">
+      <div class="divlog">
+        <input type="email" class="form-control " id="login" placeholder="login" formControlName="login" [ngClass]="{ 'is-invalid': submitted && f['login'].errors }"
+               aria-describedby="emailHelp">
+        <div *ngIf="submitted && f['login'].errors" class="invalid-feedback">
+          <div *ngIf="f['login'].errors['required']">login ne doit pas etre vide</div>
+        </div>
       </div>
       <div class="divlog">
-
-        <input type="password" class="form-control " id="exampleInputPassword1" placeholder="password">
+        <input type="password" class="form-control " id="password" placeholder="password" formControlName="password" [ngClass]="{ 'is-invalid': submitted && f['password'].errors }">
+        <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+          <div *ngIf="f['password'].errors['required']">password ne doit pas etre vide</div>
+        </div>
       </div>
-
-      <button type="button" class="btn btn-dark w-50 fw-bold" [routerLink]="['/home']">connexion</button>
+      <button  class="btn btn-dark w-50 fw-bold" >connexion</button>
+<!--      [routerLink]="['/home']"-->
     </form>
   </div>
 
