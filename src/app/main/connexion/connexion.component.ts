@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthentificationBackofficerService} from "../../service/authentification-backofficer.service";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-connexion',
@@ -11,14 +12,14 @@ export class ConnexionComponent {
   connexionForm!: FormGroup;
   submitted = false;
 
-  constructor(private formBuilder: FormBuilder,private authentification:AuthentificationBackofficerService) {
+  constructor(private formBuilder: FormBuilder,private authentification:AuthentificationBackofficerService,private http:HttpClient) {
 
   }
 
   ngOnInit(): void {
     this.connexionForm = this.formBuilder.group({
-      login: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.pattern]],
+      login: ['', Validators.required],
+      password: ['', Validators.required],
     });
   }
 
@@ -32,8 +33,8 @@ export class ConnexionComponent {
     if (this.connexionForm.invalid) {
       return;
     }
-    this.authentification.connexion(this.connexionForm)
-    //console.warn(this.connexionForm.value)
-    // this.ajout(this.registerForm.value);
+    this.authentification.
+    login(this.connexionForm.value)
   }
+
 }

@@ -286,3 +286,14 @@ table.table .avatar {
   font-weight: normal;
 }
 
+.ajoy{
+  background-color: black;
+}
+.boutonajout{
+  background-color: #fd7e14;
+}
+.deconnexion1{
+  position: absolute;
+  transform: translate(-190%, -40%)
+}
+

@@ -1,12 +1,17 @@
 <div class="container">
+  <img class="deconnexion1" src="assets/deconnexion1.png" alt="" sizes="" srcset="" (click)="logout()">
   <div class="table-wrapper">
-    <div class="table-title">
-      <div class="row">
-        <div class="col-sm-6">
+    <div class="table-title ajoy">
+
+      <div class="row ">
+
+        <div class="col-sm-6 ">
+
           <h2>Manage <b>Employees</b></h2>
         </div>
-        <div class="col-sm-6">
-          <a class="btn btn-success" (click)="openModal(template)" data-toggle="modal"><i
+
+        <div class="col-sm-6 ">
+          <a class="btn boutonajout" (click)="openModal(template)" data-toggle="modal"><i
             class="material-icons">&#xE147;</i>
             <span>Add New Employee</span></a>
         </div>
@@ -146,7 +151,6 @@
 
     <div class="formulaire1 container h-100">
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="m-lg-2 ">
-        <span class="d-flex justify-content-center bg-black text-warning "><h2>{{status}} user</h2></span>
         <div class="d-flex justify-content-between form-group">
           <div class="mb-3 ">
             <label for="prenom" class="form-label">Prenom</label>
@@ -164,6 +168,7 @@
             <div *ngIf="submitted && f['nom'].errors" class="invalid-feedback">
               <div *ngIf="f['nom'].errors['required']">nom ne doit pas etre vide</div>
             </div>
+
           </div>
         </div>
         <div class="d-flex form-group" >

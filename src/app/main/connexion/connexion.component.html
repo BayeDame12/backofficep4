@@ -10,20 +10,26 @@
 
     <form class="formulaireConeexion" [formGroup]="connexionForm" (ngSubmit)="onSubmit()">
       <div class="divlog">
-        <input type="email" class="form-control " id="login" placeholder="login" formControlName="login" [ngClass]="{ 'is-invalid': submitted && f['login'].errors }"
+        <input type="email" class="form-control " id="login" placeholder="login" formControlName="login"
+               [ngClass]="{ 'is-invalid': submitted && f['login'].errors }"
                aria-describedby="emailHelp">
-        <div *ngIf="submitted && f['login'].errors" class="invalid-feedback">
-          <div *ngIf="f['login'].errors['required']">login ne doit pas etre vide</div>
+
+        <div *ngIf="(f['login'].dirty || f['login'].touched) && f['login'].errors" class="errors">
+          <span *ngIf="f['login'].errors?.['required']">Email is required</span>
+          <span *ngIf="f['login'].errors?.['login']">Email is invalid</span>
         </div>
+
       </div>
       <div class="divlog">
-        <input type="password" class="form-control " id="password" placeholder="password" formControlName="password" [ngClass]="{ 'is-invalid': submitted && f['password'].errors }">
-        <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
-          <div *ngIf="f['password'].errors['required']">password ne doit pas etre vide</div>
+        <input type="password" class="form-control " id="password" placeholder="password" formControlName="password"
+               [ngClass]="{ 'is-invalid': submitted && f['password'].errors }">
+        <div *ngIf="(f['password'].dirty || f['password'].touched) && f['password'].errors" class="errors">
+          <span *ngIf="f['password'].errors?.['required']">password is required</span>
+          <span *ngIf="f['password'].errors?.['login']">password is invalid</span>
         </div>
       </div>
-      <button  class="btn btn-dark w-50 fw-bold" >connexion</button>
-<!--      [routerLink]="['/home']"-->
+      <button class="btn btn-dark w-50 fw-bold">connexion</button>
+      <!--      [routerLink]="['/home']"-->
     </form>
   </div>
 
